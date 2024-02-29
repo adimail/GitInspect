@@ -1,0 +1,62 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.input-container {
+  margin-top: 100px;
+  width: 100%;
+  text-align: -webkit-center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.top {
+  align-items: center;
+  padding: 20px;
+  background-color: #242424;
+  padding-bottom: 100px;
+}
+
+button {
+  width: fit-content;
+  padding: 5px 20px;
+  border-radius: 7px;
+  border: none;
+  font-size: medium;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: rgb(74, 179, 74);
+}
+
+button:active {
+  background-color: #dcdcdc;
+}
+
+.url-input {
+  width: calc(100%);
+  max-width: 1111px;
+  height: 50px;
+  padding: 20px 15px;
+  border: 1px solid #ccc;
+  border-radius: 500px;
+  box-sizing: border-box;
+}
+
+.input-hint {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+  padding: 0;
+}
+
+.themeicon {
+  cursor: pointer;
+}
