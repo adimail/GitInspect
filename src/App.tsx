@@ -3,6 +3,8 @@ import Home from "./components/home/home";
 import Algorithm from "./components/algorithm/algorithm";
 import NotFound from "./components/notfound";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+
 function App() {
   return (
     <Routes>

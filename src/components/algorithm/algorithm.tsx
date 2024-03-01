@@ -2,7 +2,7 @@ import "./index.css";
 
 function Algorithm() {
   return (
-    <div className="algorithm">
+    <div className="container algorithm">
       <h1>Are you curious about evaluation? read me</h1>
       <p>
         This is the README of the algorithm I designed to evaluate the github

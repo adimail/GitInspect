@@ -6,20 +6,20 @@
 }
 
 .input-container {
-  margin-top: 100px;
   width: 100%;
   text-align: -webkit-center;
   display: flex;
   align-items: center;
   flex-direction: column;
   gap: 15px;
+  margin-bottom: 100px;
+  margin-top: 100px;
 }
 
 .top {
   align-items: center;
   padding: 20px;
   background-color: #242424;
-  padding-bottom: 100px;
 }
 
 button {
@@ -59,4 +59,34 @@ button:active {
 
 .themeicon {
   cursor: pointer;
+}
+
+.fade-out {
+  animation: fadeOutDown 0.5s forwards; /* Fade out and move down animation */
+}
+
+.fade-in {
+  animation: fadeInUp 0.5s forwards; /* Fade in and move up animation */
+}
+
+@keyframes fadeOutDown {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
