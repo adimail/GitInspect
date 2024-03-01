@@ -23,7 +23,7 @@ export const ThemeProvider: React.FC = ({ children }) => {
     return localStorage.getItem("theme") || "light";
   });
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const root = document.documentElement;
     if (theme === "light") {
       root.style.setProperty("--background-color", "#ffffff");
@@ -34,6 +34,9 @@ export const ThemeProvider: React.FC = ({ children }) => {
       root.style.setProperty("--link-color", "#42b983");
       root.style.setProperty("--link-hover-color", "#64d8cb");
     }
+  }, [theme]);
+
+  React.useEffect(() => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
