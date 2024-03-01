@@ -3,6 +3,7 @@ import "./ip.css";
 import { useTheme } from "../../context/themecontext";
 import { useRepoContext } from "../../context/repocontext";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
+import ParseRepo from "../../utils/parserepo";
 
 const InputField = () => {
   const { theme, setTheme } = useTheme();
@@ -13,6 +14,7 @@ const InputField = () => {
   };
 
   const handleSubmit = () => {
+    ParseRepo(inputValue);
     console.log(inputValue);
   };
 
