@@ -50,13 +50,6 @@ button:active {
   box-sizing: border-box;
 }
 
-.input-hint {
-  font-size: 14px;
-  color: #888;
-  margin: 0;
-  padding: 0;
-}
-
 .themeicon {
   cursor: pointer;
 }

@@ -3,7 +3,6 @@ import "./ip.css";
 import { useTheme } from "../../context/themecontext";
 import { useRepoContext } from "../../context/repocontext";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
-import { FaGithub } from "react-icons/fa";
 import ParseRepo from "../../utils/parserepo";
 import ErrorModal from "../ErrorModal";
 import { motion } from "framer-motion";
@@ -14,21 +13,29 @@ const InputField = () => {
   const [string, setString] = useState("");
   const inputRef = useRef(null);
   const [fadeOut, setFadeOut] = useState(false);
-  const [marginTop, setMarginTop] = useState(100);
-  const [marginBottom, setMarginBottom] = useState(100);
-  const [submitButtonVisible, setSubmitButtonVisible] = useState(true);
+  const [marginTop, setMarginTop] = useState(50);
+  const [marginBottom, setMarginBottom] = useState(0);
+  const [submitButtonVisible, setSubmitButtonVisible] = useState(false);
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.ctrlKey && event.key === "k") {
-        inputRef.current.focus();
-        event.preventDefault();
-      }
+    const handleFocus = () => {
+      setMarginTop(100);
+      setMarginBottom(100);
+      setSubmitButtonVisible(true);
     };
-    document.addEventListener("keydown", handleKeyDown);
+
+    const handleBlur = () => {
+      setMarginTop(30);
+      setMarginBottom(0);
+      setSubmitButtonVisible(false);
+    };
+
+    inputRef.current.addEventListener("focus", handleFocus);
+    inputRef.current.addEventListener("blur", handleBlur);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      inputRef.current.removeEventListener("focus", handleFocus);
+      inputRef.current.removeEventListener("blur", handleBlur);
     };
   }, []);
 
@@ -56,9 +63,6 @@ const InputField = () => {
         const { owner: parsedOwner, repoName: parsedRepoName } = parsedRepo;
         owner = parsedOwner;
         repoName = parsedRepoName;
-        setMarginTop(30);
-        setMarginBottom(10);
-        setSubmitButtonVisible(false);
         inputRef.current.blur();
       }
     }
@@ -82,23 +86,18 @@ const InputField = () => {
       transition={{ duration: 0.5 }}
     >
       <div className="navbar">
-        <h1>ReadRepo</h1>
-        <div className="d-flex align-items-center gap-3">
-          <a href="https://github.com/adimail/ReadRepo">
-            <FaGithub color="white" size={20} />
-          </a>
-          <motion.div
-            className={`themeicon ${fadeOut ? "fade-out" : "fade-in"}`}
-            onClick={toggleTheme}
-            whileHover={{ scale: 1.1 }}
-          >
-            {theme === "light" ? (
-              <MdLightMode size={27} color="orange" />
-            ) : (
-              <MdDarkMode size={27} color="gray" />
-            )}
-          </motion.div>
-        </div>
+        <h1 style={{ color: "white" }}>ReadRepo</h1>
+        <motion.div
+          className={`themeicon ${fadeOut ? "fade-out" : "fade-in"}`}
+          onClick={toggleTheme}
+          whileHover={{ scale: 1.1 }}
+        >
+          {theme === "light" ? (
+            <MdLightMode size={27} color="orange" />
+          ) : (
+            <MdDarkMode size={27} color="gray" />
+          )}
+        </motion.div>
       </div>
       <motion.div
         className="input-container"
@@ -116,7 +115,17 @@ const InputField = () => {
           onChange={(e) => setString(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        {submitButtonVisible && <button onClick={handleSubmit}>Submit</button>}
+        <motion.button
+          style={{
+            opacity: submitButtonVisible ? 1 : 0,
+            transition: "opacity 0.5s ease",
+          }}
+          onClick={handleSubmit}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: submitButtonVisible ? 1 : 0 }}
+        >
+          Submit
+        </motion.button>
       </motion.div>
     </motion.div>
   );

@@ -26,11 +26,13 @@ export const ThemeProvider: React.FC = ({ children }) => {
   React.useLayoutEffect(() => {
     const root = document.documentElement;
     if (theme === "light") {
-      root.style.setProperty("--background-color", "#ffffff");
+      root.style.setProperty("--background-color", "#D5D8DC");
+      root.style.setProperty("--text-color", "#000000"); // Set text color for light theme
       root.style.setProperty("--link-color", "#646cff");
       root.style.setProperty("--link-hover-color", "#535bf2");
     } else {
-      root.style.setProperty("--background-color", "#222222");
+      root.style.setProperty("--background-color", "#2C3E50");
+      root.style.setProperty("--text-color", "#ffffff"); // Set text color for dark theme
       root.style.setProperty("--link-color", "#42b983");
       root.style.setProperty("--link-hover-color", "#64d8cb");
     }
