@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./ip.css";
 import { useTheme } from "../../context/themecontext";
 import { useRepoContext } from "../../context/repocontext";
@@ -9,6 +9,22 @@ const InputField = () => {
   const { theme, setTheme } = useTheme();
   const { setInputValue, setOwner, setRepoName } = useRepoContext();
   const [string, setString] = useState("");
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.key === "k") {
+        // Focus on the input field when Ctrl + K is pressed
+        inputRef.current.focus();
+        event.preventDefault();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
@@ -16,10 +32,21 @@ const InputField = () => {
 
   const handleSubmit = () => {
     setInputValue(string);
-    const { owner, repoName } = ParseRepo(string);
-    setOwner(owner);
-    setRepoName(repoName);
-    console.log(string);
+    if (string) {
+      const parsedRepo = ParseRepo(string);
+      if (parsedRepo !== null) {
+        const { owner, repoName } = parsedRepo;
+        setOwner(owner);
+        setRepoName(repoName);
+        console.log(string);
+      } else {
+        setOwner("");
+        setRepoName("");
+      }
+    } else {
+      setOwner("");
+      setRepoName("");
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -41,11 +68,12 @@ const InputField = () => {
         </div>
       </div>
       <p>
-        Evaluate github repositories. Read about the{" "}
+        Evaluate GitHub repositories. Read about the{" "}
         <a href="/algorithm">algorithm</a>
       </p>
       <div className="input-container">
         <input
+          ref={inputRef}
           type="text"
           placeholder="Enter GitHub repository URL"
           className="url-input"
