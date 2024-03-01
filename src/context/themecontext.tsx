@@ -25,7 +25,6 @@ export const ThemeProvider: React.FC = ({ children }) => {
 
   React.useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--transition-duration", "0.5s");
     if (theme === "light") {
       root.style.setProperty("--background-color", "#ffffff");
       root.style.setProperty("--link-color", "#646cff");

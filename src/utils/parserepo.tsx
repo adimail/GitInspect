@@ -1,4 +1,9 @@
-function ParseRepo(repoUrl: string): void {
+interface RepoInfo {
+  owner: string;
+  repoName: string;
+}
+
+function ParseRepo(repoUrl: string): RepoInfo | null {
   let owner: string, repoName: string;
 
   // Remove .git extension if present
@@ -18,11 +23,13 @@ function ParseRepo(repoUrl: string): void {
     [owner, repoName] = parts;
   } else {
     console.error("Invalid GitHub repository URL or name");
-    return;
+    return null;
   }
 
   console.log("Owner:", owner);
   console.log("Repository Name:", repoName);
+
+  return { owner, repoName };
 }
 
 export default ParseRepo;

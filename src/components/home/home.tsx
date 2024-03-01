@@ -1,5 +1,5 @@
 import InputField from "../inputfield/inputfield";
-import Content from "../body/body";
+import Content from "../content/content";
 
 function Home() {
   return (

@@ -4,7 +4,9 @@ interface RepoContextType {
   inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   owner: string | null;
+  setOwner: React.Dispatch<React.SetStateAction<string | null>>;
   repoName: string | null;
+  setRepoName: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const RepoContext = createContext<RepoContextType | undefined>(undefined);
@@ -24,7 +26,14 @@ export const RepoProvider: React.FC = ({ children }) => {
 
   return (
     <RepoContext.Provider
-      value={{ inputValue, setInputValue, owner, repoName }}
+      value={{
+        inputValue,
+        setInputValue,
+        owner,
+        setOwner,
+        repoName,
+        setRepoName,
+      }}
     >
       {children}
     </RepoContext.Provider>

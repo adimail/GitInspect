@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ip.css";
 import { useTheme } from "../../context/themecontext";
 import { useRepoContext } from "../../context/repocontext";
@@ -7,15 +7,19 @@ import ParseRepo from "../../utils/parserepo";
 
 const InputField = () => {
   const { theme, setTheme } = useTheme();
-  const { inputValue, setInputValue } = useRepoContext();
+  const { setInputValue, setOwner, setRepoName } = useRepoContext();
+  const [string, setString] = useState("");
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
   const handleSubmit = () => {
-    ParseRepo(inputValue);
-    console.log(inputValue);
+    setInputValue(string);
+    const { owner, repoName } = ParseRepo(string);
+    setOwner(owner);
+    setRepoName(repoName);
+    console.log(string);
   };
 
   const handleKeyDown = (e) => {
@@ -45,8 +49,8 @@ const InputField = () => {
           type="text"
           placeholder="Enter GitHub repository URL"
           className="url-input"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          value={string}
+          onChange={(e) => setString(e.target.value)}
           onKeyDown={handleKeyDown}
         />
         <button onClick={handleSubmit}>Submit</button>
