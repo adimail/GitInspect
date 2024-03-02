@@ -45,3 +45,20 @@ a:hover {
 h1 {
   font-family: monospace;
 }
+
+/* scrollbar */
+body::-webkit-scrollbar {
+  width: 5px;
+  background-color: #131322;
+}
+
+/* Thumb */
+body::-webkit-scrollbar-thumb {
+  background-color: #50505b;
+  border-radius: 9px;
+}
+
+/* track */
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #131322;
+}

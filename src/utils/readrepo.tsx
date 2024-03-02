@@ -23,17 +23,20 @@ export interface RepoInfo {
   contributors_count: number;
   last_commit_date: string;
   code_frequency_link: string;
-  owner_avatar_url: string;
-  owner_repos_count: number;
-  owner_followers_count: number;
-  owner_following_count: number;
 }
 
-export async function getRepoInfo(
+export interface OwnerInfo {
+  avatar_url: string;
+  public_repos: number;
+  followers: number;
+  following: number;
+}
+
+export async function GetInfo(
   owner: string,
   repo: string,
   token?: string
-): Promise<RepoInfo | string> {
+): Promise<{ ownerInfo: OwnerInfo; repoInfo: RepoInfo } | string> {
   try {
     const headers: any = {};
     if (token) {
@@ -42,7 +45,7 @@ export async function getRepoInfo(
 
     const repoInfoUrl = `https://api.github.com/repos/${owner}/${repo}`;
     const [
-      repoInfo,
+      repoData,
       branches,
       contributors,
       commits,
@@ -52,7 +55,7 @@ export async function getRepoInfo(
       workflows,
       issues,
       pulls,
-      ownerInfo,
+      userInfo,
     ] = await Promise.all([
       axios.get(repoInfoUrl, { headers }),
       axios.get(`${repoInfoUrl}/branches`, { headers }),
@@ -67,13 +70,13 @@ export async function getRepoInfo(
       axios.get(`https://api.github.com/users/${owner}`, { headers }),
     ]);
 
-    const repoInfoData = repoInfo.data as RepoInfo;
-    const ownerInfoData = ownerInfo.data;
+    const repoInfoData = repoData.data as RepoInfo;
+    const ownerInfoData = userInfo.data as OwnerInfo;
 
     const created_at = new Date(repoInfoData.created_at);
     const last_commit_date = new Date(repoInfoData.updated_at);
 
-    return {
+    const repoInfo: RepoInfo = {
       ...repoInfoData,
       owner,
       branches: branches.data.length,
@@ -90,11 +93,16 @@ export async function getRepoInfo(
       ),
       last_commit_date: last_commit_date.toISOString().split("T")[0],
       code_frequency_link: `https://github.com/${owner}/${repo}/graphs/code-frequency`,
-      owner_avatar_url: ownerInfoData.avatar_url,
-      owner_repos_count: ownerInfoData.public_repos,
-      owner_followers_count: ownerInfoData.followers,
-      owner_following_count: ownerInfoData.following,
     };
+
+    const ownerInfo: OwnerInfo = {
+      avatar_url: ownerInfoData.avatar_url,
+      public_repos: ownerInfoData.public_repos,
+      followers: ownerInfoData.followers,
+      following: ownerInfoData.following,
+    };
+
+    return { ownerInfo, repoInfo };
   } catch (error: any) {
     if (error.response && error.response.status === 404) {
       return `User ${owner} or repository ${repo} not found.`;
