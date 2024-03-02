@@ -1,7 +1,8 @@
 import { useRepoContext } from "../../context/repocontext";
 import RepositoryEvaluation from "../RepositoryEvaluation";
+import { IsValidURL } from "../../utils/parserepo";
 
-const DefaultContent = () => {
+const HomeContent = () => {
   return (
     <div className="container" style={{ marginTop: "30px" }}>
       <h4>
@@ -67,10 +68,12 @@ const DefaultContent = () => {
           <strong>Don’t forget to read the code!</strong>
         </h3>
         <p>
-          There’s no better way to evaluate the quality of software than to
-          inspect the actual software itself. With proprietary stuff this isn’t
-          an option, but the beauty of open source is all the code is right
-          there waiting for you to read it.
+          <mark style={{ backgroundColor: "lightblue" }}>
+            There’s no better way to evaluate the quality of software than to
+            inspect the actual software itself.
+          </mark>{" "}
+          With proprietary stuff this isn’t an option, but the beauty of open
+          source is all the code is right there waiting for you to read it.
         </p>
         <p>
           People often skip this (paramount) step because reading code can be
@@ -90,13 +93,25 @@ const DefaultContent = () => {
   );
 };
 
-const Content = () => {
-  const { owner, repoName } = useRepoContext();
+const InvalidURL = ({ invalidURL }: { invalidURL: string }) => {
+  return (
+    <div className="container">
+      <p>{invalidURL} is not a valid URL</p>
+    </div>
+  );
+};
 
-  if (owner && repoName) {
-    return <RepositoryEvaluation />;
+const Content = () => {
+  const { inputValue } = useRepoContext();
+
+  if (inputValue) {
+    if (IsValidURL(inputValue)) {
+      return <RepositoryEvaluation />;
+    } else {
+      return <InvalidURL invalidURL={inputValue} />;
+    }
   } else {
-    return <DefaultContent />;
+    return <HomeContent />;
   }
 };
 

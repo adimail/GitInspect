@@ -3,6 +3,24 @@ interface RepoInfo {
   repoName: string;
 }
 
+function IsValidURL(repoUrl: string): boolean {
+  repoUrl = repoUrl.replace(/\.git$/, "");
+
+  const parts: string[] = repoUrl.split("/");
+  if (
+    (parts.length === 5 || parts.length === 4) &&
+    parts[0] === "https:" &&
+    parts[1] === "" &&
+    parts[2] === "github.com"
+  ) {
+    return true;
+  } else if (parts.length === 2) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function ParseRepo(repoUrl: string): RepoInfo | null {
   let owner: string, repoName: string;
 
@@ -37,4 +55,4 @@ function ParseRepo(repoUrl: string): RepoInfo | null {
   return { owner, repoName };
 }
 
-export default ParseRepo;
+export { ParseRepo, IsValidURL };

@@ -32,12 +32,40 @@ export interface OwnerInfo {
   following: number;
 }
 
+async function userRepoExists(
+  owner: string,
+  repo: string,
+  token?: string
+): Promise<boolean> {
+  try {
+    const headers: any = {};
+    if (token) {
+      headers["Authorization"] = `token ${token}`;
+    }
+
+    const response = await axios.get(
+      `https://api.github.com/repos/${owner}/${repo}`,
+      { headers }
+    );
+    return response.status === 200;
+  } catch (error: any) {
+    if (error.response && error.response.status === 404) {
+      return false;
+    } else {
+      console.error(
+        `Error checking repository existence for ${owner}/${repo}: ${error.message}`
+      );
+      throw error;
+    }
+  }
+}
+
 export async function GetInfo(
   owner: string,
   repo: string,
   token?: string
 ): Promise<{ ownerInfo: OwnerInfo; repoInfo: RepoInfo } | null> {
-  try {
+  if (await userRepoExists(owner, repo, token)) {
     const headers: any = {};
     if (token) {
       headers["Authorization"] = `token ${token}`;
@@ -103,13 +131,7 @@ export async function GetInfo(
     };
 
     return { ownerInfo, repoInfo };
-  } catch (error: any) {
-    if (error.response && error.response.status === 404) {
-      console.log(`User ${owner} or repository ${repo} not found.`);
-      return null;
-    } else {
-      console.log(`Error fetching data for ${owner}/${repo}: ${error.message}`);
-      return null;
-    }
+  } else {
+    return null;
   }
 }

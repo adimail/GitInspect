@@ -9,10 +9,11 @@ interface RepoData {
 }
 
 const RepositoryEvaluation = () => {
-  const { owner, repoName } = useRepoContext();
+  const { inputValue, owner, repoName } = useRepoContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [repoData, setRepoData] = useState<RepoData | null>(null);
+  const [userExists, setUserExists] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchRepoData = async () => {
@@ -24,14 +25,19 @@ const RepositoryEvaluation = () => {
       try {
         const token: string = GitHubAPIKey;
         const data = await GetInfo(owner, repoName, token);
-        setRepoData(data);
+        if (data) {
+          setRepoData(data);
+          setUserExists(true);
+        } else {
+          setUserExists(false);
+        }
       } catch (error: any) {
         setError(`Error fetching data: ${error.message}`);
         setRepoData(null);
       } finally {
         setTimeout(() => {
           setLoading(false);
-        }, 1111);
+        }, 999);
       }
     };
 
@@ -39,7 +45,16 @@ const RepositoryEvaluation = () => {
   }, [owner, repoName]);
 
   if (loading) return <p className="container">Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p className="container">{error}</p>;
+  if (inputValue && !userExists)
+    return (
+      <p className="container">
+        There is a typo in your search.
+        <br />
+        GItInspect cannot find matching results for user {owner} & reposotory{" "}
+        {repoName}
+      </p>
+    );
   if (!repoData) return null;
 
   const { repoInfo, ownerInfo } = repoData;
