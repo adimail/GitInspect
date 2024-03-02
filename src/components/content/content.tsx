@@ -10,7 +10,7 @@ const DefaultContent = () => {
 };
 
 const Content = () => {
-  const { inputValue, owner, repoName } = useRepoContext();
+  const { owner, repoName } = useRepoContext();
 
   if (owner && repoName) {
     return <RepositoryEvaluation />;

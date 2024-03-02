@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./ip.css";
 import { useTheme } from "../../context/themecontext";
 import { useRepoContext } from "../../context/repocontext";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
 import ParseRepo from "../../utils/parserepo";
-import ErrorModal from "../ErrorModal";
 import { motion } from "framer-motion";
 
 const InputField = () => {
@@ -63,7 +62,7 @@ const InputField = () => {
         const { owner: parsedOwner, repoName: parsedRepoName } = parsedRepo;
         owner = parsedOwner;
         repoName = parsedRepoName;
-        inputRef.current.blur();
+        // inputRef.current.blur();
       }
     }
 
@@ -72,7 +71,7 @@ const InputField = () => {
     console.log(string);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSubmit();
     }

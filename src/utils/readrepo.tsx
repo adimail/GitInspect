@@ -8,6 +8,7 @@ export interface RepoInfo {
     name: string;
   };
   created_at: string;
+  updated_at: string;
   days_since_creation: number;
   stargazers_count: number;
   forks_count: number;
@@ -25,6 +26,7 @@ export interface RepoInfo {
   owner_avatar_url: string;
   owner_repos_count: number;
   owner_followers_count: number;
+  owner_following_count: number;
 }
 
 export async function getRepoInfo(
@@ -93,7 +95,7 @@ export async function getRepoInfo(
       owner_followers_count: ownerInfoData.followers,
       owner_following_count: ownerInfoData.following,
     };
-  } catch (error) {
+  } catch (error: any) {
     if (error.response && error.response.status === 404) {
       return `User ${owner} or repository ${repo} not found.`;
     } else {
