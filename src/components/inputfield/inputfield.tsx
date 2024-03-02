@@ -22,7 +22,7 @@ const InputField = () => {
       setMarginTop(100);
       setMarginBottom(100);
       setSubmitButtonVisible(true);
-      setPlaceholder("Enter GitHub repository URL");
+      setPlaceholder("Enter GitHub repository URL 🔗🤗");
     };
 
     const handleBlur = () => {

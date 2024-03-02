@@ -95,8 +95,10 @@ const HomeContent = () => {
 
 const InvalidURL = ({ invalidURL }: { invalidURL: string }) => {
   return (
-    <div className="container">
-      <p>{invalidURL} is not a valid URL</p>
+    <div className="container pt-5">
+      <p>
+        <mark> {invalidURL}</mark> is not a valid GitHub repository URL
+      </p>
     </div>
   );
 };
