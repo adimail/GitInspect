@@ -8,12 +8,12 @@ import { RepoProvider } from "./context/repocontext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ThemeProvider>
-        <RepoProvider>
+    <RepoProvider>
+      <BrowserRouter>
+        <ThemeProvider>
           <App />
-        </RepoProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+        </ThemeProvider>
+      </BrowserRouter>
+    </RepoProvider>
   </React.StrictMode>
 );

@@ -1,17 +1,23 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "./components/home/home";
 import Algorithm from "./components/algorithm/algorithm";
 import NotFound from "./components/notfound";
+import InputField from "./components/inputfield/inputfield";
+import { HomeContent } from "./components/home/home";
+import RepositoryEvaluation from "./components/RepositoryEvaluation";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" Component={Home} />
-      <Route path="/algorithm" Component={Algorithm} />
-      <Route path="*" Component={NotFound} />
-    </Routes>
+    <>
+      <InputField />
+      <Routes>
+        <Route path="/" element={<HomeContent />} />
+        <Route path="/:owner/:repoName" element={<RepositoryEvaluation />} />
+        <Route path="/algorithm" element={<Algorithm />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
 

@@ -8,19 +8,21 @@ import { motion } from "framer-motion";
 
 const InputField = () => {
   const { theme, setTheme } = useTheme();
-  const { setInputValue, setOwner, setRepoName } = useRepoContext();
-  const [string, setString] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
   const [fadeOut, setFadeOut] = useState(false);
-  const [marginTop, setMarginTop] = useState(50);
+  const [marginTop, setMarginTop] = useState(30);
   const [marginBottom, setMarginBottom] = useState(0);
   const [submitButtonVisible, setSubmitButtonVisible] = useState(false);
   const [placeholder, setPlaceholder] = useState("Enter GitHub repository URL");
 
+  const { setInputValue, setOwner, setRepoName } = useRepoContext();
+  const [string, setString] = useState("");
+
   useEffect(() => {
     const handleFocus = () => {
-      setMarginTop(100);
-      setMarginBottom(100);
+      setMarginTop(75);
+      setMarginBottom(75);
       setSubmitButtonVisible(true);
       setPlaceholder("Enter GitHub repository URL 🔗🤗");
     };
@@ -69,6 +71,12 @@ const InputField = () => {
       }
     }
 
+    if (owner && repoName) {
+      window.location.href = `/${owner}/${repoName}`;
+    } else {
+      window.location.href = `/invalidurl`;
+    }
+
     setOwner(owner);
     setRepoName(repoName);
     console.log(string);
@@ -81,18 +89,13 @@ const InputField = () => {
   };
 
   return (
-    <motion.div
-      className="top"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="top">
       <div className="navbar">
         <h1 style={{ color: "white" }}>GitInspect</h1>
         <motion.div
-          className={`themeicon ${fadeOut ? "fade-out" : "fade-in"}`}
+          className={`themeicon`}
           onClick={toggleTheme}
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.15 }}
         >
           {theme === "light" ? (
             <MdLightMode size={27} color="orange" />
@@ -104,7 +107,7 @@ const InputField = () => {
       <motion.div
         className="input-container"
         style={{ marginTop: marginTop, marginBottom: marginBottom }}
-        initial={{ marginTop: 10, marginBottom: 10 }}
+        initial={{ marginTop: 30, marginBottom: 0 }}
         animate={{ marginTop: marginTop, marginBottom: marginBottom }}
         transition={{ duration: 0.9 }}
       >
@@ -129,7 +132,7 @@ const InputField = () => {
           Submit
         </motion.button>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 

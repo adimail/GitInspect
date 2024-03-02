@@ -120,7 +120,11 @@ body::-webkit-scrollbar-track {
   flex-direction: column;
   gap: 10px;
   margin-top: 20px;
-  transform: scale(0.75);
+  align-items: center;
+}
+
+.stats img {
+  width: 75%;
 }
 
 .owner-avtar {

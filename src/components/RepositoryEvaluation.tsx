@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { GitHubAPIKey } from "../secrets";
 import { GetInfo, RepoInfo, OwnerInfo } from "../utils/readrepo";
-import { useRepoContext } from "../context/repocontext";
 import { FaGithub } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
 import { useTheme } from "../context/themecontext";
+import { useParams } from "react-router-dom";
 
 interface RepoData {
   repoInfo: RepoInfo;
@@ -13,7 +13,10 @@ interface RepoData {
 
 const RepositoryEvaluation = () => {
   const { theme } = useTheme();
-  const { inputValue, owner, repoName } = useRepoContext();
+  const { owner, repoName } = useParams<{
+    owner: string;
+    repoName: string;
+  }>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [repoData, setRepoData] = useState<RepoData | null>(null);
@@ -48,7 +51,6 @@ const RepositoryEvaluation = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-          // }, 999);
         }, 0);
       }
     };
@@ -58,15 +60,19 @@ const RepositoryEvaluation = () => {
 
   if (loading) return <p className="container pt-5">Loading...</p>;
   if (error) return <p className="container">{error}</p>;
-  if (inputValue && !userExists)
+  if (owner && repoName && !userExists)
     return (
-      <p className="container pt-5">
-        There is a typo in your search.
-        <br />
-        <br />
-        GitInspect cannot find matching results for user{" "}
-        <strong>{owner}</strong> & reposotory <strong>{repoName}</strong>
-      </p>
+      <div className="container">
+        <p className="pt-5">
+          There is a typo in your search.
+          <br />
+          GitInspect cannot find matching results for user{" "}
+          <strong>{owner}</strong> & reposotory <strong>{repoName}</strong>
+        </p>
+        <p>
+          Go back to <a href="/">home</a> page
+        </p>
+      </div>
     );
   if (!repoData) return null;
 
@@ -99,6 +105,10 @@ const RepositoryEvaluation = () => {
           <img
             src={`https://github-readme-streak-stats.herokuapp.com/?user=${owner}&theme=${cardTheme}`}
             alt="Streak Stats"
+          />
+          <img
+            src={`https://github-readme-stats.vercel.app/api/top-langs?username=adimail&layout=compact&hide=jupyter%20notebook&theme=${cardTheme}`}
+            alt="GitHub Stats"
           />
         </div>
       </div>
