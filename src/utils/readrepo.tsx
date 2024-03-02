@@ -36,7 +36,7 @@ export async function GetInfo(
   owner: string,
   repo: string,
   token?: string
-): Promise<{ ownerInfo: OwnerInfo; repoInfo: RepoInfo } | string> {
+): Promise<{ ownerInfo: OwnerInfo; repoInfo: RepoInfo } | null> {
   try {
     const headers: any = {};
     if (token) {
@@ -105,9 +105,11 @@ export async function GetInfo(
     return { ownerInfo, repoInfo };
   } catch (error: any) {
     if (error.response && error.response.status === 404) {
-      return `User ${owner} or repository ${repo} not found.`;
+      console.log(`User ${owner} or repository ${repo} not found.`);
+      return null;
     } else {
-      return `Error fetching data for ${owner}/${repo}: ${error.message}`;
+      console.log(`Error fetching data for ${owner}/${repo}: ${error.message}`);
+      return null;
     }
   }
 }

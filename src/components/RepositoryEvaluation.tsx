@@ -3,14 +3,16 @@ import { GitHubAPIKey } from "../secrets";
 import { GetInfo, RepoInfo, OwnerInfo } from "../utils/readrepo";
 import { useRepoContext } from "../context/repocontext";
 
+interface RepoData {
+  repoInfo: RepoInfo;
+  ownerInfo: OwnerInfo;
+}
+
 const RepositoryEvaluation = () => {
   const { owner, repoName } = useRepoContext();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [repoData, setRepoData] = useState<{
-    repoInfo: RepoInfo;
-    ownerInfo: OwnerInfo;
-  } | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+  const [repoData, setRepoData] = useState<RepoData | null>(null);
 
   useEffect(() => {
     const fetchRepoData = async () => {
@@ -20,22 +22,25 @@ const RepositoryEvaluation = () => {
       setError("");
 
       try {
-        const token = GitHubAPIKey;
+        const token: string = GitHubAPIKey;
         const data = await GetInfo(owner, repoName, token);
         setRepoData(data);
-      } catch (error) {
+      } catch (error: any) {
         setError(`Error fetching data: ${error.message}`);
+        setRepoData(null);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1111);
       }
     };
 
     fetchRepoData();
   }, [owner, repoName]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="container">Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-  if (!repoData) return null; // Or whatever fallback you prefer
+  if (!repoData) return null;
 
   const { repoInfo, ownerInfo } = repoData;
 

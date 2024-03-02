@@ -25,3 +25,7 @@ dist-ssr
 
 # Secrets and API keys
 secrets.ts
+
+# firebase cache
+.firebaserc
+.firebase

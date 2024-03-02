@@ -62,7 +62,7 @@ const InputField = () => {
         const { owner: parsedOwner, repoName: parsedRepoName } = parsedRepo;
         owner = parsedOwner;
         repoName = parsedRepoName;
-        inputRef.current.blur();
+        inputRef.current?.blur();
       }
     }
 
@@ -85,7 +85,7 @@ const InputField = () => {
       transition={{ duration: 0.5 }}
     >
       <div className="navbar">
-        <h1 style={{ color: "white" }}>ReadRepo</h1>
+        <h1 style={{ color: "white" }}>GitInspect</h1>
         <motion.div
           className={`themeicon ${fadeOut ? "fade-out" : "fade-in"}`}
           onClick={toggleTheme}
