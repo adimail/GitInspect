@@ -5,17 +5,23 @@ import { useRepoContext } from "../context/repocontext";
 
 const RepositoryEvaluation = () => {
   const { owner, repoName } = useRepoContext();
-  const [repoInfo, setRepoInfo] = useState<RepoInfo | string>(string);
+  const [repoInfo, setRepoInfo] = useState<RepoInfo | string>("");
 
   useEffect(() => {
     const fetchRepoInfo = async () => {
-      const token = GitHubAPIKey;
-      const info: RepoInfo | string = await getRepoInfo(owner, repoName, token);
-      if (typeof info === "string") {
-        console.error("Error fetching repo info:", info);
-        setRepoInfo(info);
-      } else {
-        setRepoInfo(info);
+      if (owner && repoName) {
+        const token = GitHubAPIKey;
+        const info: RepoInfo | string = await getRepoInfo(
+          owner,
+          repoName,
+          token
+        );
+        if (typeof info === "string") {
+          console.error("Error fetching repo info:", info);
+          setRepoInfo(info);
+        } else {
+          setRepoInfo(info);
+        }
       }
     };
 

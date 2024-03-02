@@ -10,7 +10,7 @@ const InputField = () => {
   const { theme, setTheme } = useTheme();
   const { setInputValue, setOwner, setRepoName } = useRepoContext();
   const [string, setString] = useState("");
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [fadeOut, setFadeOut] = useState(false);
   const [marginTop, setMarginTop] = useState(50);
   const [marginBottom, setMarginBottom] = useState(0);
@@ -29,12 +29,12 @@ const InputField = () => {
       setSubmitButtonVisible(false);
     };
 
-    inputRef.current.addEventListener("focus", handleFocus);
-    inputRef.current.addEventListener("blur", handleBlur);
+    inputRef.current?.addEventListener("focus", handleFocus);
+    inputRef.current?.addEventListener("blur", handleBlur);
 
     return () => {
-      inputRef.current.removeEventListener("focus", handleFocus);
-      inputRef.current.removeEventListener("blur", handleBlur);
+      inputRef.current?.removeEventListener("focus", handleFocus);
+      inputRef.current?.removeEventListener("blur", handleBlur);
     };
   }, []);
 
@@ -62,7 +62,7 @@ const InputField = () => {
         const { owner: parsedOwner, repoName: parsedRepoName } = parsedRepo;
         owner = parsedOwner;
         repoName = parsedRepoName;
-        // inputRef.current.blur();
+        inputRef.current.blur();
       }
     }
 

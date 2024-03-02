@@ -17,7 +17,9 @@ export const useTheme = () => {
   return context;
 };
 
-export const ThemeProvider: React.FC = ({ children }) => {
+export const ThemeProvider: React.FC<React.PropsWithChildren<{}>> = ({
+  children,
+}) => {
   const [theme, setTheme] = React.useState<string>(() => {
     // Read the theme from localStorage if available, otherwise use "light" as default
     return localStorage.getItem("theme") || "light";

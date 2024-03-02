@@ -19,7 +19,9 @@ export const useRepoContext = () => {
   return context;
 };
 
-export const RepoProvider: React.FC = ({ children }) => {
+export const RepoProvider: React.FC<React.PropsWithChildren<{}>> = ({
+  children,
+}) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [owner, setOwner] = useState<string | null>(null);
   const [repoName, setRepoName] = useState<string | null>(null);
