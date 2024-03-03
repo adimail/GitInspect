@@ -22,14 +22,36 @@ body {
   padding: 0;
 }
 
-.page {
+.page404 {
   color: black;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.page img {
+.page404 img {
   height: 200px;
   margin: 30px;
+  transition: 0.3s ease;
+}
+
+.page404 img:hover {
+  transform: scale(1.1);
+}
+
+.content {
+  max-width: 768px;
+}
+
+@media (max-width: 768px) {
+  .page404 {
+    flex-direction: column;
+  }
+
+  .page404 img {
+    margin-bottom: 20px;
+  }
 }
 
 a {
@@ -164,4 +186,22 @@ body::-webkit-scrollbar-track {
   .repo-info {
     width: auto;
   }
+}
+
+.invalidurl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.invalidurl img {
+  width: 100px;
+  transition: 0.3s ease;
+}
+
+.invalidurl img:hover {
+  transform: scale(1.1);
 }

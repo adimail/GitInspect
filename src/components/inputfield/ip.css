@@ -53,33 +53,3 @@ button:active {
 .themeicon {
   cursor: pointer;
 }
-
-.fade-out {
-  animation: fadeOutDown 0.5s forwards; /* Fade out and move down animation */
-}
-
-.fade-in {
-  animation: fadeInUp 0.5s forwards; /* Fade in and move up animation */
-}
-
-@keyframes fadeOutDown {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-}
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}

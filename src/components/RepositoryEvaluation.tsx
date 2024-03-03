@@ -5,6 +5,7 @@ import { FaGithub } from "react-icons/fa";
 import { FaStar } from "react-icons/fa6";
 import { useTheme } from "../context/themecontext";
 import { useParams } from "react-router-dom";
+import { useRepoContext } from "../context/repocontext";
 
 interface RepoData {
   repoInfo: RepoInfo;
@@ -22,6 +23,7 @@ const RepositoryEvaluation = () => {
   const [repoData, setRepoData] = useState<RepoData | null>(null);
   const [userExists, setUserExists] = useState<boolean>(false);
   const [cardTheme, setCardTheme] = useState<string>("darcula ");
+  const { inputValue } = useRepoContext();
 
   useEffect(() => {
     if (theme === "dark") {
@@ -51,6 +53,7 @@ const RepositoryEvaluation = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
+          console.log(inputValue);
         }, 0);
       }
     };

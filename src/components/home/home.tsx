@@ -89,12 +89,34 @@ const HomeContent = () => {
   );
 };
 
-const InvalidURL = ({ invalidURL }: { invalidURL: string }) => {
+const InvalidURL = () => {
+  const invalidToken = new URLSearchParams(window.location.search).get(
+    "invalidtoken"
+  );
+
   return (
-    <div className="container pt-5">
-      <p>
-        <mark> {invalidURL}</mark> is not a valid GitHub repository URL
-      </p>
+    <div className="container invalidurl pt-5">
+      <div>
+        <p>
+          <mark>
+            <i> {invalidToken ? decodeURIComponent(invalidToken) : ""}</i>
+          </mark>{" "}
+          is not a valid GitHub repository URL
+        </p>
+        <p>Please provide the URL in any one of the following formats:</p>
+        <ul>
+          <li>https://github.com/Username/RepoName.git</li>
+          <li>https://github.com/Username/RepoName</li>
+          <li>Username/RepoName</li>
+        </ul>
+      </div>
+      <a href="/">
+        <img
+          src="https://raw.githubusercontent.com/adimail/ReadRepo/main/public/dragon.png"
+          alt="Dragon"
+          className="image"
+        />
+      </a>
     </div>
   );
 };

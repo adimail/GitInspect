@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import "./ip.css";
 import { useTheme } from "../../context/themecontext";
 import { useRepoContext } from "../../context/repocontext";
@@ -6,55 +6,45 @@ import { MdLightMode, MdDarkMode } from "react-icons/md";
 import { ParseRepo } from "../../utils/parserepo";
 import { motion } from "framer-motion";
 
+interface InputFieldState {
+  marginTop: number;
+  marginBottom: number;
+  submitButtonVisible: boolean;
+  placeholder: string | null;
+  string: string;
+}
+
 const InputField = () => {
   const { theme, setTheme } = useTheme();
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const [fadeOut, setFadeOut] = useState(false);
-  const [marginTop, setMarginTop] = useState(30);
-  const [marginBottom, setMarginBottom] = useState(0);
-  const [submitButtonVisible, setSubmitButtonVisible] = useState(false);
-  const [placeholder, setPlaceholder] = useState("Enter GitHub repository URL");
-
   const { setInputValue, setOwner, setRepoName } = useRepoContext();
-  const [string, setString] = useState("");
+
+  const [state, setState] = useState<InputFieldState>({
+    marginTop: 30,
+    marginBottom: 0,
+    submitButtonVisible: false,
+    placeholder: "Enter GitHub repository URL",
+    string: "",
+  });
+
+  const { marginTop, marginBottom, submitButtonVisible, placeholder, string } =
+    state;
+
+  const inputquery = new URLSearchParams(window.location.search).get(
+    "inputquery"
+  );
 
   useEffect(() => {
-    const handleFocus = () => {
-      setMarginTop(75);
-      setMarginBottom(75);
-      setSubmitButtonVisible(true);
-      setPlaceholder("Enter GitHub repository URL 🔗🤗");
-    };
-
-    const handleBlur = () => {
-      setMarginTop(30);
-      setMarginBottom(0);
-      setSubmitButtonVisible(false);
-      setPlaceholder("Enter GitHub repository URL");
-    };
-
-    inputRef.current?.addEventListener("focus", handleFocus);
-    inputRef.current?.addEventListener("blur", handleBlur);
-
-    return () => {
-      inputRef.current?.removeEventListener("focus", handleFocus);
-      inputRef.current?.removeEventListener("blur", handleBlur);
-    };
-  }, []);
+    if (inputquery) {
+      setState((prevState) => ({
+        ...prevState,
+        placeholder: inputquery,
+      }));
+    }
+  }, [inputquery]);
 
   const toggleTheme = () => {
-    setFadeOut(true);
     setTheme(theme === "light" ? "dark" : "light");
   };
-
-  useEffect(() => {
-    if (fadeOut) {
-      setTimeout(() => {
-        setFadeOut(false);
-      }, 300);
-    }
-  }, [fadeOut]);
 
   const handleSubmit = () => {
     setInputValue(string);
@@ -67,14 +57,17 @@ const InputField = () => {
         const { owner: parsedOwner, repoName: parsedRepoName } = parsedRepo;
         owner = parsedOwner;
         repoName = parsedRepoName;
-        inputRef.current?.blur();
       }
     }
 
     if (owner && repoName) {
-      window.location.href = `/${owner}/${repoName}`;
+      window.location.href = `/${owner}/${repoName}?inputquery=${encodeURIComponent(
+        string
+      )}`;
     } else {
-      window.location.href = `/invalidurl`;
+      window.location.href = `/not-found?invalidtoken=${encodeURIComponent(
+        string
+      )}`;
     }
 
     setOwner(owner);
@@ -88,10 +81,34 @@ const InputField = () => {
     }
   };
 
+  const handleFocus = () => {
+    setState((prevState) => ({
+      ...prevState,
+      marginTop: 75,
+      marginBottom: 75,
+      submitButtonVisible: true,
+      placeholder: "Enter GitHub repository URL 🔗🤗",
+    }));
+  };
+
+  const handleBlur = () => {
+    setState((prevState) => ({
+      ...prevState,
+      marginTop: 30,
+      marginBottom: 0,
+      submitButtonVisible: false,
+      placeholder: inputquery,
+    }));
+  };
+
   return (
     <div className="top">
       <div className="navbar">
-        <h1 style={{ color: "white" }}>GitInspect</h1>
+        <h1>
+          <a style={{ color: "white" }} href="/">
+            GitInspect
+          </a>
+        </h1>
         <motion.div
           className={`themeicon`}
           onClick={toggleTheme}
@@ -112,12 +129,15 @@ const InputField = () => {
         transition={{ duration: 0.9 }}
       >
         <input
-          ref={inputRef}
           type="text"
-          placeholder={placeholder}
+          placeholder={placeholder ?? ""}
           className="url-input"
           value={string}
-          onChange={(e) => setString(e.target.value)}
+          onChange={(e) =>
+            setState((prevState) => ({ ...prevState, string: e.target.value }))
+          }
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           onKeyDown={handleKeyDown}
         />
         <motion.button

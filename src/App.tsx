@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Algorithm from "./components/algorithm/algorithm";
 import NotFound from "./components/notfound";
 import InputField from "./components/inputfield/inputfield";
-import { HomeContent } from "./components/home/home";
+import { HomeContent, InvalidURL } from "./components/home/home";
 import RepositoryEvaluation from "./components/RepositoryEvaluation";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -15,6 +15,7 @@ function App() {
         <Route path="/" element={<HomeContent />} />
         <Route path="/:owner/:repoName" element={<RepositoryEvaluation />} />
         <Route path="/algorithm" element={<Algorithm />} />
+        <Route path="/not-found" element={<InvalidURL />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
