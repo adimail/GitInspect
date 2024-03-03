@@ -188,6 +188,17 @@ body::-webkit-scrollbar-track {
   }
 }
 
+.repo-avatar {
+  align-self: center;
+  width: 75%;
+  margin: 1rem;
+  transition: all 0.5s ease;
+}
+
+.repo-avatar:hover {
+  transform: scale(1.05);
+}
+
 .invalidurl {
   display: flex;
   flex-wrap: wrap;
@@ -204,4 +215,26 @@ body::-webkit-scrollbar-track {
 
 .invalidurl img:hover {
   transform: scale(1.1);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100vw;
+}
+
+th,
+td {
+  border: 1px solid var(--table-border-color);
+  text-align: left;
+  padding: 8px;
+  font-size: small;
+}
+
+th {
+  background-color: var(--table-background-color);
 }

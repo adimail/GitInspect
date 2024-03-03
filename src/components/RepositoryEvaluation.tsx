@@ -6,6 +6,7 @@ import { FaStar } from "react-icons/fa6";
 import { useTheme } from "../context/themecontext";
 import { useParams } from "react-router-dom";
 import { useRepoContext } from "../context/repocontext";
+import { motion } from "framer-motion";
 
 interface RepoData {
   repoInfo: RepoInfo;
@@ -24,6 +25,12 @@ const RepositoryEvaluation = () => {
   const [userExists, setUserExists] = useState<boolean>(false);
   const [cardTheme, setCardTheme] = useState<string>("darcula ");
   const { inputValue } = useRepoContext();
+
+  const [isTableCollapsed, setIsTableCollapsed] = useState<boolean>(true);
+
+  const toggleTableVisibility = () => {
+    setIsTableCollapsed(!isTableCollapsed);
+  };
 
   useEffect(() => {
     if (theme === "dark") {
@@ -137,7 +144,14 @@ const RepositoryEvaluation = () => {
             <FaStar color="yellow" /> {repoInfo.stargazers_count}
           </p>
           <p>Total Commits: {repoInfo.commits_count}</p>
-          <p>Date Created: {repoInfo.created_at}</p>
+          <p>
+            Date Created:{" "}
+            {new Date(repoInfo.created_at).toLocaleDateString("en-US", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })}
+          </p>
           <p>Days Since Creation: {repoInfo.days_since_creation}</p>
           <p>Forks: {repoInfo.forks_count}</p>
           <p>Branches: {repoInfo.branches}</p>
@@ -150,8 +164,53 @@ const RepositoryEvaluation = () => {
           <p>Total Number of Contributors: {repoInfo.contributors_count}</p>
           <p>Last Commit Date: {repoInfo.last_commit_date}</p>
           <p>
+            Average addition per commit: {repoInfo.average_addition_per_commit}{" "}
+            lines
+          </p>
+          <p>
+            Average deletion per commit: {repoInfo.average_deletion_per_commit}{" "}
+            lines
+          </p>
+          <p>
             Code Frequency: <a href={repoInfo.code_frequency_link}>View</a>
           </p>
+          <p>Commits:</p>
+          <p onClick={toggleTableVisibility} style={{ cursor: "pointer" }}>
+            Click to {isTableCollapsed ? "open" : "collapse"} commit history
+            table
+          </p>
+
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{
+              height: isTableCollapsed ? 0 : "auto",
+              opacity: isTableCollapsed ? 0 : 1,
+            }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            style={{ overflow: "hidden" }}
+          >
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Commit Name</th>
+                    <th>Additions</th>
+                    <th>Deletions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {repoInfo.commits_details &&
+                    repoInfo.commits_details.map((commit, index) => (
+                      <tr key={index}>
+                        <td>{commit.message}</td>
+                        <td>{commit.additions}</td>
+                        <td>{commit.deletions}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>

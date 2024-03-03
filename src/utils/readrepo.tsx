@@ -23,6 +23,9 @@ export interface RepoInfo {
   contributors_count: number;
   last_commit_date: string;
   code_frequency_link: string;
+  commits_details: CommitDetails[];
+  average_addition_per_commit: number;
+  average_deletion_per_commit: number;
 }
 
 export interface OwnerInfo {
@@ -30,6 +33,13 @@ export interface OwnerInfo {
   public_repos: number;
   followers: number;
   following: number;
+}
+
+export interface CommitDetails {
+  sha: string;
+  message: string;
+  additions: number;
+  deletions: number;
 }
 
 async function userRepoExists(
@@ -88,7 +98,7 @@ export async function GetInfo(
       axios.get(repoInfoUrl, { headers }),
       axios.get(`${repoInfoUrl}/branches`, { headers }),
       axios.get(`${repoInfoUrl}/contributors`, { headers }),
-      axios.get(`${repoInfoUrl}/commits`, { headers }),
+      axios.get(`${repoInfoUrl}/commits?per_page=100`, { headers }),
       axios.get(`${repoInfoUrl}/contents`, { headers }),
       axios.get(`${repoInfoUrl}/languages`, { headers }),
       axios.get(`${repoInfoUrl}/releases`, { headers }),
@@ -103,6 +113,46 @@ export async function GetInfo(
 
     const created_at = new Date(repoInfoData.created_at);
     const last_commit_date = new Date(repoInfoData.updated_at);
+
+    const commitDetailsPromises = (commits.data as any[]).map(
+      async (commit: any) => {
+        const commitUrl = commit.url;
+        const commitResponse = await axios.get(commitUrl, { headers });
+        const commitData = commitResponse.data;
+        const additions = commitData.stats.additions;
+        const deletions = commitData.stats.deletions;
+        return {
+          sha: commitData.sha,
+          message: commitData.commit.message,
+          additions,
+          deletions,
+        } as CommitDetails;
+      }
+    );
+
+    const commitDetails = await Promise.all(commitDetailsPromises);
+
+    let totalAdditions = 0;
+    let totalDeletions = 0;
+
+    commitDetails.forEach((commit) => {
+      totalAdditions += commit.additions;
+      totalDeletions += commit.deletions;
+    });
+
+    const numberOfCommits = commitDetails.length;
+
+    const averageAdditionPerCommit =
+      numberOfCommits > 0
+        ? (totalAdditions / numberOfCommits).toFixed(2)
+        : "0.00";
+    const averageDeletionPerCommit =
+      numberOfCommits > 0
+        ? (totalDeletions / numberOfCommits).toFixed(2)
+        : "0.00";
+
+    const averageAdditionPerCommitNum = parseFloat(averageAdditionPerCommit);
+    const averageDeletionPerCommitNum = parseFloat(averageDeletionPerCommit);
 
     const repoInfo: RepoInfo = {
       ...repoInfoData,
@@ -121,6 +171,9 @@ export async function GetInfo(
       ),
       last_commit_date: last_commit_date.toISOString().split("T")[0],
       code_frequency_link: `https://github.com/${owner}/${repo}/graphs/code-frequency`,
+      commits_details: commitDetails,
+      average_addition_per_commit: averageAdditionPerCommitNum,
+      average_deletion_per_commit: averageDeletionPerCommitNum,
     };
 
     const ownerInfo: OwnerInfo = {
