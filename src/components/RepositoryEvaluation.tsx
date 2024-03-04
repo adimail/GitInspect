@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { GitHubAPIKey } from "../secrets";
 import { GetInfo, RepoInfo, OwnerInfo } from "../utils/readrepo";
-import { FaGithub } from "react-icons/fa";
-import { FaStar } from "react-icons/fa6";
 import { useTheme } from "../context/themecontext";
 import { useParams } from "react-router-dom";
-import { useRepoContext } from "../context/repocontext";
-import { motion } from "framer-motion";
+import { useActiveTab } from "../utils/activetab";
+
+import { FaCode, FaHistory } from "react-icons/fa";
+import { SiPowerpages } from "react-icons/si";
+import { BsFillFileEarmarkPersonFill } from "react-icons/bs";
+
+import { User, Summary, Repo, CommitHistory } from "./evaluationtabs";
 
 interface RepoData {
   repoInfo: RepoInfo;
@@ -24,12 +27,39 @@ const RepositoryEvaluation = () => {
   const [repoData, setRepoData] = useState<RepoData | null>(null);
   const [userExists, setUserExists] = useState<boolean>(false);
   const [cardTheme, setCardTheme] = useState<string>("darcula ");
-  const { inputValue } = useRepoContext();
 
-  const [isTableCollapsed, setIsTableCollapsed] = useState<boolean>(true);
+  const { activeTab, handleTabClick } = useActiveTab();
 
-  const toggleTableVisibility = () => {
-    setIsTableCollapsed(!isTableCollapsed);
+  const renderComponent = () => {
+    switch (activeTab) {
+      case "summary":
+        return (
+          <Summary
+            owner={owner}
+            cardTheme={cardTheme}
+            repoName={repoName}
+            repoInfo={repoInfo}
+            ownerInfo={ownerInfo}
+          />
+        );
+      case "userinfo":
+        return (
+          <User ownerInfo={ownerInfo} owner={owner} cardTheme={cardTheme} />
+        );
+      case "repoinfo":
+        return (
+          <Repo
+            owner={owner}
+            cardTheme={cardTheme}
+            repoName={repoName}
+            repoInfo={repoInfo}
+          />
+        );
+      case "commithistory":
+        return <CommitHistory repoInfo={repoInfo} />;
+      default:
+        return null;
+    }
   };
 
   useEffect(() => {
@@ -60,7 +90,6 @@ const RepositoryEvaluation = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-          console.log(inputValue);
         }, 0);
       }
     };
@@ -69,7 +98,7 @@ const RepositoryEvaluation = () => {
   }, [owner, repoName]);
 
   if (loading) return <p className="container pt-5">Loading...</p>;
-  if (error) return <p className="container">{error}</p>;
+  if (error) return <p className="container pt-5">{error}</p>;
   if (owner && repoName && !userExists)
     return (
       <div className="container">
@@ -89,131 +118,44 @@ const RepositoryEvaluation = () => {
   const { repoInfo, ownerInfo } = repoData;
 
   return (
-    <div className="container repo-eval">
-      <div className="left-sidebar">
-        {/* User profile */}
-        <div className="user-profile">
-          <img
-            src={ownerInfo.avatar_url}
-            className="owner-avatar"
-            alt="Owner Avatar"
-          />
-          <div className="user-info">
-            <p>{owner}</p>
-            <p>Followers: {ownerInfo.followers}</p>
-            <p>Following: {ownerInfo.following}</p>
-            <p>Public Repositories: {ownerInfo.public_repos}</p>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="stats mb-3">
-          <img
-            src={`https://github-readme-stats.vercel.app/api?username=${owner}&show_icons=true&theme=${cardTheme}`}
-            alt="GitHub Stats"
-          />
-          <img
-            src={`https://github-readme-streak-stats.herokuapp.com/?user=${owner}&theme=${cardTheme}`}
-            alt="Streak Stats"
-          />
-          <img
-            src={`https://github-readme-stats.vercel.app/api/top-langs?username=adimail&layout=compact&hide=jupyter%20notebook&theme=${cardTheme}`}
-            alt="GitHub Stats"
-          />
-        </div>
-      </div>
-
-      {/* Repo info */}
-      <div className="right-sidebar">
-        <div className="d-flex flex-column">
-          <div>
-            <div className="user-title mb-3">
-              <FaGithub size={35} style={{ marginRight: "15px" }} />
-              <a href={`https://github.com/${owner}`}>{owner}</a>
-              <p>/</p>
-              <a href={`https://github.com/${owner}/${repoName}`}>{repoName}</a>
-            </div>
-          </div>
-          <img
-            className="repo-avatar"
-            src={`https://github-readme-stats.vercel.app/api/pin/?username=${owner}&repo=${repoName}&theme=${cardTheme}`}
-            alt="Repository"
-          />
-          {/* <FaStar color="yellow" /> */}
-          <p>
-            <FaStar color="yellow" /> {repoInfo.stargazers_count}
-          </p>
-          <p>Total Commits: {repoInfo.commits_count}</p>
-          <p>
-            Date Created:{" "}
-            {new Date(repoInfo.created_at).toLocaleDateString("en-US", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })}
-          </p>
-          <p>Days Since Creation: {repoInfo.days_since_creation}</p>
-          <p>Forks: {repoInfo.forks_count}</p>
-          <p>Branches: {repoInfo.branches}</p>
-          <p>Total Number of Files: {repoInfo.files_count}</p>
-          <p>Languages Used: {repoInfo.languages_used.join(", ")}</p>
-          <p>Releases: {repoInfo.releases_count}</p>
-          <p>Workflows (Actions): {repoInfo.workflows_count}</p>
-          <p>Issues: {repoInfo.issues_count}</p>
-          <p>Pull Requests: {repoInfo.pulls_count}</p>
-          <p>Total Number of Contributors: {repoInfo.contributors_count}</p>
-          <p>Last Commit Date: {repoInfo.last_commit_date}</p>
-          <p>
-            Average addition per commit: {repoInfo.average_addition_per_commit}{" "}
-            lines
-          </p>
-          <p>
-            Average deletion per commit: {repoInfo.average_deletion_per_commit}{" "}
-            lines
-          </p>
-          <p>
-            Code Frequency: <a href={repoInfo.code_frequency_link}>View</a>
-          </p>
-          <p>Commits:</p>
-          <p onClick={toggleTableVisibility} style={{ cursor: "pointer" }}>
-            Click to {isTableCollapsed ? "open" : "collapse"} commit history
-            table
-          </p>
-
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{
-              height: isTableCollapsed ? 0 : "auto",
-              opacity: isTableCollapsed ? 0 : 1,
-            }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            style={{ overflow: "hidden" }}
+    <>
+      <div className="wrapper">
+        <div className="gitinspect-navbar">
+          <div
+            className={`nav-item ${activeTab === "summary" ? "active" : ""}`}
+            onClick={() => handleTabClick("summary")}
           >
-            <div className="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Commit Name</th>
-                    <th>Additions</th>
-                    <th>Deletions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {repoInfo.commits_details &&
-                    repoInfo.commits_details.map((commit, index) => (
-                      <tr key={index}>
-                        <td>{commit.message}</td>
-                        <td>{commit.additions}</td>
-                        <td>{commit.deletions}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </motion.div>
+            <SiPowerpages size={20} />
+            <span>Summary</span>
+          </div>
+          <div
+            className={`nav-item ${activeTab === "repoinfo" ? "active" : ""}`}
+            onClick={() => handleTabClick("repoinfo")}
+          >
+            <FaCode size={20} />
+            <span>Repo Info</span>
+          </div>
+          <div
+            className={`nav-item ${activeTab === "userinfo" ? "active" : ""}`}
+            onClick={() => handleTabClick("userinfo")}
+          >
+            <BsFillFileEarmarkPersonFill size={20} />
+            <span>User Info</span>
+          </div>
+          <div
+            className={`nav-item ${
+              activeTab === "commithistory" ? "active" : ""
+            }`}
+            onClick={() => handleTabClick("commithistory")}
+          >
+            <FaHistory size={20} />
+            <span>Commits</span>
+          </div>
         </div>
+
+        <div className="container">{renderComponent()}</div>
       </div>
-    </div>
+    </>
   );
 };
 

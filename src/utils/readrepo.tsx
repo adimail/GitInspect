@@ -14,7 +14,7 @@ export interface RepoInfo {
   forks_count: number;
   branches: number;
   commits_count: number;
-  files_count: number;
+  // files_count: number;
   languages_used: string[];
   releases_count: number;
   workflows_count: number;
@@ -33,6 +33,8 @@ export interface OwnerInfo {
   public_repos: number;
   followers: number;
   following: number;
+  joined_at: string;
+  created_at: string;
 }
 
 export interface CommitDetails {
@@ -81,13 +83,19 @@ export async function GetInfo(
       headers["Authorization"] = `token ${token}`;
     }
 
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    };
+
     const repoInfoUrl = `https://api.github.com/repos/${owner}/${repo}`;
     const [
       repoData,
       branches,
       contributors,
       commits,
-      files,
+      // files,
       languages,
       releases,
       workflows,
@@ -99,7 +107,7 @@ export async function GetInfo(
       axios.get(`${repoInfoUrl}/branches`, { headers }),
       axios.get(`${repoInfoUrl}/contributors`, { headers }),
       axios.get(`${repoInfoUrl}/commits?per_page=100`, { headers }),
-      axios.get(`${repoInfoUrl}/contents`, { headers }),
+      // axios.get(`${repoInfoUrl}/contents`, { headers }),
       axios.get(`${repoInfoUrl}/languages`, { headers }),
       axios.get(`${repoInfoUrl}/releases`, { headers }),
       axios.get(`${repoInfoUrl}/actions/workflows`, { headers }),
@@ -113,6 +121,21 @@ export async function GetInfo(
 
     const created_at = new Date(repoInfoData.created_at);
     const last_commit_date = new Date(repoInfoData.updated_at);
+    const joinedAt = new Date(ownerInfoData.created_at);
+
+    const languagesData: Record<string, number> = languages.data;
+
+    // Explicitly provide types for reduce function parameters
+    const totalSize: number = Object.values(languagesData).reduce(
+      (total: number, size: number) => total + size,
+      0
+    );
+
+    // Explicitly provide types for map function parameters
+    const languagesUsed: string[] = Object.entries(languagesData).map(
+      ([language, size]: [string, number]) =>
+        `${language} (${((size / totalSize) * 100).toFixed(2)}%)`
+    );
 
     const commitDetailsPromises = (commits.data as any[]).map(
       async (commit: any) => {
@@ -160,8 +183,8 @@ export async function GetInfo(
       branches: branches.data.length,
       contributors_count: contributors.data.length,
       commits_count: commits.data.length,
-      files_count: files.data.length,
-      languages_used: Object.keys(languages.data),
+      // files_count: files.data,
+      languages_used: languagesUsed,
       releases_count: releases.data.length,
       workflows_count: workflows.data.total_count,
       issues_count: issues.data.length,
@@ -181,6 +204,8 @@ export async function GetInfo(
       public_repos: ownerInfoData.public_repos,
       followers: ownerInfoData.followers,
       following: ownerInfoData.following,
+      joined_at: joinedAt.toLocaleDateString("en-US", options),
+      created_at: ownerInfoData.created_at,
     };
 
     return { ownerInfo, repoInfo };

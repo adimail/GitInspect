@@ -3,14 +3,12 @@
   --background-color: #090909;
   --link-color: #646cff;
   --link-hover-color: #535bf2;
+  --active-nav-bar-color: #28b463;
   /* --transition-duration: 0.3s; */
 }
 
 body {
-  /* transition: background-color var(--transition-duration) ease-out; */
   font-family: monospace;
-  line-height: 1.5;
-  font-weight: 400;
   color-scheme: light dark;
   color: var(--text-color);
   background-color: var(--background-color);
@@ -20,6 +18,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
+  font-size: small;
 }
 
 .page404 {
@@ -147,6 +146,7 @@ body::-webkit-scrollbar-track {
 
 .stats img {
   width: 75%;
+  max-width: 500px;
 }
 
 .owner-avtar {
@@ -155,8 +155,11 @@ body::-webkit-scrollbar-track {
   transform: scale(0.8);
 }
 
-.repo-eval {
+.container {
   padding-top: 2rem;
+}
+
+.repo-eval {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -190,16 +193,17 @@ body::-webkit-scrollbar-track {
 
 .repo-avatar {
   align-self: center;
-  width: 75%;
-  margin: 1rem;
+  width: 100%;
   transition: all 0.5s ease;
+  transform: scale(0.8);
 }
 
 .repo-avatar:hover {
-  transform: scale(1.05);
+  transform: scale(0.85);
 }
 
 .invalidurl {
+  font-size: smaller;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -225,6 +229,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   max-width: 100vw;
+  margin-bottom: 50px;
 }
 
 th,
@@ -232,9 +237,107 @@ td {
   border: 1px solid var(--table-border-color);
   text-align: left;
   padding: 8px;
-  font-size: small;
 }
 
 th {
   background-color: var(--table-background-color);
+  padding: 10px 20px;
+}
+
+.gitinspect-navbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-item span {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.gitinspect-navbar > * {
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.gitinspect-navbar > *:hover {
+  color: rgb(138, 121, 91);
+}
+
+.active {
+  color: var(--active-nav-bar-color);
+}
+
+.repo-info-summary {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.repo-info {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  flex: 1;
+}
+
+.repo-info > div {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 0 10px;
+}
+
+@media (max-width: 768px) {
+  .repo-info > div {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+.summary-table {
+  padding: 13px;
+  padding-bottom: 0;
+}
+
+.user-summary {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .user-summary {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.avtar-big {
+  width: 100%;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  border: 5px solid rgb(169, 169, 169);
+  transform: scale(0.8);
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+}
+
+.stats img {
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+p {
+  margin: 0;
+  margin-bottom: 10px;
 }

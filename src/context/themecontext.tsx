@@ -34,13 +34,15 @@ export const ThemeProvider: React.FC<React.PropsWithChildren<{}>> = ({
       root.style.setProperty("--link-hover-color", "#535bf2");
       root.style.setProperty("--table-background-color", "#76ccc1");
       root.style.setProperty("--table-border-color", "#000000");
+      root.style.setProperty("--active-nav-bar-color", "#6C3483");
     } else {
-      root.style.setProperty("--background-color", "#2C3E50");
+      root.style.setProperty("--background-color", "#323f4c");
       root.style.setProperty("--text-color", "#ffffff");
       root.style.setProperty("--link-color", "#42b983");
       root.style.setProperty("--link-hover-color", "#64d8cb");
       root.style.setProperty("--table-background-color", "#1E272E");
       root.style.setProperty("--table-border-color", "#ffffff");
+      root.style.setProperty("--active-nav-bar-color", "#28b463");
     }
   }, [theme]);
 

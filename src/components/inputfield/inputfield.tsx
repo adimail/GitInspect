@@ -19,7 +19,7 @@ const InputField = () => {
   const { setInputValue, setOwner, setRepoName } = useRepoContext();
 
   const [state, setState] = useState<InputFieldState>({
-    marginTop: 30,
+    marginTop: 10,
     marginBottom: 0,
     submitButtonVisible: false,
     placeholder: "Enter GitHub repository URL",
@@ -84,8 +84,8 @@ const InputField = () => {
   const handleFocus = () => {
     setState((prevState) => ({
       ...prevState,
-      marginTop: 75,
-      marginBottom: 75,
+      marginTop: 60,
+      marginBottom: 60,
       submitButtonVisible: true,
       placeholder: "Enter GitHub repository URL 🔗🤗",
     }));
@@ -97,7 +97,7 @@ const InputField = () => {
       marginTop: 30,
       marginBottom: 0,
       submitButtonVisible: false,
-      placeholder: inputquery,
+      placeholder: inputquery ?? "Enter GitHub repository URL",
     }));
   };
 
@@ -124,9 +124,9 @@ const InputField = () => {
       <motion.div
         className="input-container"
         style={{ marginTop: marginTop, marginBottom: marginBottom }}
-        initial={{ marginTop: 30, marginBottom: 0 }}
+        initial={{ marginTop: 10, marginBottom: 0 }}
         animate={{ marginTop: marginTop, marginBottom: marginBottom }}
-        transition={{ duration: 0.9 }}
+        transition={{ duration: 0.6 }}
       >
         <input
           type="text"
@@ -140,6 +140,7 @@ const InputField = () => {
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
         />
+
         <motion.button
           style={{
             opacity: submitButtonVisible ? 1 : 0,
