@@ -40,17 +40,12 @@ function ParseRepo(repoUrl: string): RepoInfo | null {
   } else if (parts.length === 2) {
     [owner, repoName] = parts;
   } else {
-    console.error("Invalid GitHub repository URL or name");
     return null;
   }
 
   if (owner === "" || repoName === "") {
-    console.error("Invalid GitHub repository URL or name");
     return null;
   }
-
-  console.log("Owner:", owner);
-  console.log("Repository Name:", repoName);
 
   return { owner, repoName };
 }
