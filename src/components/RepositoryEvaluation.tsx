@@ -10,7 +10,7 @@ import { SiPowerpages } from "react-icons/si";
 import { BsFillFileEarmarkPersonFill } from "react-icons/bs";
 
 import { User, Summary, Repo, CommitHistory } from "./evaluationtabs";
-import { GoDesktopDownload } from "react-icons/go";
+import { MoveToTop } from "../utils/gototop";
 
 interface RepoData {
   repoInfo: RepoInfo;
@@ -20,9 +20,10 @@ interface RepoData {
 const RepositoryEvaluation = () => {
   const { theme } = useTheme();
   const { owner, repoName } = useParams<{
-    owner: string;
-    repoName: string;
-  }>();
+    owner: string | undefined;
+    repoName: string | undefined;
+  }>() ?? { owner: undefined, repoName: undefined };
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [repoData, setRepoData] = useState<RepoData | null>(null);
@@ -166,6 +167,7 @@ const RepositoryEvaluation = () => {
         </div>
 
         <div className="container">{renderComponent()} </div>
+        <MoveToTop />
       </div>
     </>
   );

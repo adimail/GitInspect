@@ -3,9 +3,9 @@ import { MoveToTop } from "../../utils/gototop";
 const HomeContent = () => {
   return (
     <div className="container" style={{ marginTop: "30px" }}>
-      <h4>
+      <h3>
         Should the Quality of GitHub Projects Be Evaluated by Their Star Count?
-      </h4>
+      </h3>
       <hr />
       <div className="container" style={{ padding: "1.5rem" }}>
         <p>
@@ -62,9 +62,7 @@ const HomeContent = () => {
           copied from other developer for sake of "resume building"
         </p>
         <hr />
-        <h3>
-          <strong>Don’t forget to read the code!</strong>
-        </h3>
+        <h3>Don’t forget to read the code!</h3>
         <p>
           <mark style={{ backgroundColor: "lightblue" }}>
             There’s no better way to evaluate the quality of software than to
@@ -86,6 +84,35 @@ const HomeContent = () => {
           <li>Would I design a solution similar to this?</li>
           <li>Are there code comments? If so, are they useful?</li>
         </ul>
+      </div>
+      <hr />
+      <div className="container">
+        <h2>Why GitInspect</h2>
+        <p>
+          Hiya stranger, I am <a href="https://adimail.github.io">Aditya</a>. I
+          developed GitInspect after interviving an candidate for a full stack
+          position at a startup. While going through the resume of the
+          candidate, I noticed that he had copied the project from another
+          student. THen I thought about a platform that will help evaluate
+          github repositories.
+        </p>
+        <p>
+          Best way to evaluate a github repository is from the commit hostory.
+          You can use GitInspect to read commits of a repository, review the
+          user profile using{" "}
+          <a href="https://github.com/anuraghazra/github-readme-stats">
+            github-readme-stats.
+          </a>
+          <p>
+            To use GitInspect, enter the project url in one of the following
+            format
+          </p>
+          <ul>
+            <li>https://github.com/Username/RepoName.git</li>
+            <li>https://github.com/Username/RepoName</li>
+            <li>Username/RepoName</li>
+          </ul>
+        </p>
       </div>
       <MoveToTop />
     </div>

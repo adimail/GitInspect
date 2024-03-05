@@ -1,6 +1,34 @@
 import { FaGithub } from "react-icons/fa";
+import { RepoInfo, OwnerInfo, CommitDetails } from "../utils/readrepo";
 
-const CommitHistory: React.FC<{ repoInfo: RepoInfo }> = ({ repoInfo }) => {
+interface CommitHistoryProps {
+  repoInfo: {
+    commits_details: CommitDetails[];
+  };
+}
+
+interface UserProps {
+  owner: string | undefined;
+  ownerInfo: OwnerInfo;
+  cardTheme: string | undefined;
+}
+
+interface RepoProps {
+  repoName: string | undefined;
+  owner: string | undefined;
+  cardTheme: string | undefined;
+  repoInfo: RepoInfo;
+}
+
+interface SummaryProps {
+  owner: string | undefined;
+  cardTheme: string | undefined;
+  repoName: string | undefined;
+  repoInfo: RepoInfo;
+  ownerInfo: OwnerInfo;
+}
+
+const CommitHistory: React.FC<CommitHistoryProps> = ({ repoInfo }) => {
   return (
     <div className="table-container">
       <table>
@@ -26,7 +54,7 @@ const CommitHistory: React.FC<{ repoInfo: RepoInfo }> = ({ repoInfo }) => {
   );
 };
 
-const User = ({ owner, ownerInfo, cardTheme }) => {
+const User: React.FC<UserProps> = ({ owner, ownerInfo, cardTheme }) => {
   return (
     <div className="user-summary">
       <div>
@@ -54,7 +82,7 @@ const User = ({ owner, ownerInfo, cardTheme }) => {
           alt="Streak Stats"
         />
         <img
-          src={`https://github-readme-stats.vercel.app/api/top-langs?username=adimail&layout=compact&hide=jupyter%20notebook&theme=${cardTheme}`}
+          src={`https://github-readme-stats.vercel.app/api/top-langs?username=${owner}&layout=compact&hide=jupyter%20notebook&theme=${cardTheme}`}
           alt="GitHub Stats"
         />
       </div>
@@ -62,7 +90,12 @@ const User = ({ owner, ownerInfo, cardTheme }) => {
   );
 };
 
-const Repo = ({ repoName, owner, cardTheme, repoInfo }) => {
+const Repo: React.FC<RepoProps> = ({
+  repoName,
+  owner,
+  cardTheme,
+  repoInfo,
+}) => {
   return (
     <div>
       <div className="user-title mb-3">
@@ -153,7 +186,13 @@ const Repo = ({ repoName, owner, cardTheme, repoInfo }) => {
   );
 };
 
-const Summary = ({ owner, cardTheme, repoName, repoInfo, ownerInfo }) => {
+const Summary: React.FC<SummaryProps> = ({
+  owner,
+  cardTheme,
+  repoName,
+  repoInfo,
+  ownerInfo,
+}) => {
   return (
     <div className="repo-eval">
       <div className="left-sidebar">
@@ -182,7 +221,7 @@ const Summary = ({ owner, cardTheme, repoName, repoInfo, ownerInfo }) => {
               alt="Streak Stats"
             />
             <img
-              src={`https://github-readme-stats.vercel.app/api/top-langs?username=adimail&layout=compact&hide=jupyter%20notebook&theme=${cardTheme}`}
+              src={`https://github-readme-stats.vercel.app/api/top-langs?username=${owner}&layout=compact&hide=jupyter%20notebook&theme=${cardTheme}`}
               alt="GitHub Stats"
             />
           </div>

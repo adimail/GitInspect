@@ -9,11 +9,8 @@ export const MoveToTop = () => {
   };
 
   return (
-    <div
-      onClick={scrollToTop}
-      style={{ textAlign: "center", marginTop: "20px" }}
-    >
-      <GoDesktopDownload />
+    <div onClick={scrollToTop} className="gototop">
+      <GoDesktopDownload size={20} />
       <span>Go to top</span>
     </div>
   );
