@@ -249,6 +249,7 @@ th {
   justify-content: space-around;
   align-items: center;
   padding: 10px;
+  background-color: #202020;
 }
 
 .nav-item {
@@ -265,6 +266,7 @@ th {
 .gitinspect-navbar > * {
   cursor: pointer;
   transition: 0.1s;
+  color: white;
 }
 
 .gitinspect-navbar > *:hover {

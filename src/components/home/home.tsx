@@ -1,3 +1,5 @@
+import { MoveToTop } from "../../utils/gototop";
+
 const HomeContent = () => {
   return (
     <div className="container" style={{ marginTop: "30px" }}>
@@ -85,6 +87,7 @@ const HomeContent = () => {
           <li>Are there code comments? If so, are they useful?</li>
         </ul>
       </div>
+      <MoveToTop />
     </div>
   );
 };

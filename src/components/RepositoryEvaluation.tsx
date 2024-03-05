@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { GitHubAPIKey } from "../secrets";
 import { GetInfo, RepoInfo, OwnerInfo } from "../utils/readrepo";
 import { useTheme } from "../context/themecontext";
@@ -10,6 +10,7 @@ import { SiPowerpages } from "react-icons/si";
 import { BsFillFileEarmarkPersonFill } from "react-icons/bs";
 
 import { User, Summary, Repo, CommitHistory } from "./evaluationtabs";
+import { GoDesktopDownload } from "react-icons/go";
 
 interface RepoData {
   repoInfo: RepoInfo;
@@ -29,6 +30,7 @@ const RepositoryEvaluation = () => {
   const [cardTheme, setCardTheme] = useState<string>("darcula ");
 
   const { activeTab, handleTabClick } = useActiveTab();
+  const navbarRef = useRef<HTMLDivElement>(null);
 
   const renderComponent = () => {
     switch (activeTab) {
@@ -61,6 +63,16 @@ const RepositoryEvaluation = () => {
         return null;
     }
   };
+
+  useEffect(() => {
+    if (navbarRef.current) {
+      const navbarOffset = navbarRef.current.getBoundingClientRect().top;
+      window.scrollTo({
+        top: window.pageYOffset + navbarOffset,
+        behavior: "smooth",
+      });
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     if (theme === "dark") {
@@ -106,7 +118,7 @@ const RepositoryEvaluation = () => {
           There is a typo in your search.
           <br />
           GitInspect cannot find matching results for user{" "}
-          <strong>{owner}</strong> & reposotory <strong>{repoName}</strong>
+          <strong>{owner}</strong> & repository <strong>{repoName}</strong>
         </p>
         <p>
           Go back to <a href="/">home</a> page
@@ -120,7 +132,7 @@ const RepositoryEvaluation = () => {
   return (
     <>
       <div className="wrapper">
-        <div className="gitinspect-navbar">
+        <div ref={navbarRef} className="gitinspect-navbar">
           <div
             className={`nav-item ${activeTab === "summary" ? "active" : ""}`}
             onClick={() => handleTabClick("summary")}
@@ -153,7 +165,7 @@ const RepositoryEvaluation = () => {
           </div>
         </div>
 
-        <div className="container">{renderComponent()}</div>
+        <div className="container">{renderComponent()} </div>
       </div>
     </>
   );

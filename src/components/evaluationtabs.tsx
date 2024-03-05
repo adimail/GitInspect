@@ -128,8 +128,8 @@ const Repo = ({ repoName, owner, cardTheme, repoInfo }) => {
           <hr />
           <p>Languages Used:</p>
           <ul>
-            {repoInfo.languages_used.map((language) => (
-              <li>{language}</li>
+            {repoInfo.languages_used.map((language, index) => (
+              <li key={index}>{language}</li>
             ))}
           </ul>
           <hr />

@@ -34,7 +34,7 @@ export const ThemeProvider: React.FC<React.PropsWithChildren<{}>> = ({
       root.style.setProperty("--link-hover-color", "#535bf2");
       root.style.setProperty("--table-background-color", "#76ccc1");
       root.style.setProperty("--table-border-color", "#000000");
-      root.style.setProperty("--active-nav-bar-color", "#6C3483");
+      root.style.setProperty("--active-nav-bar-color", "#76ccc1");
     } else {
       root.style.setProperty("--background-color", "#323f4c");
       root.style.setProperty("--text-color", "#ffffff");
