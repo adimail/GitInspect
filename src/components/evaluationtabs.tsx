@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { FaGithub } from "react-icons/fa";
 import { RepoInfo, OwnerInfo, CommitDetails } from "../utils/readrepo";
 
@@ -58,11 +59,13 @@ const User: React.FC<UserProps> = ({ owner, ownerInfo, cardTheme }) => {
   return (
     <div className="user-summary">
       <div>
-        <img
-          src={ownerInfo.avatar_url}
-          className="owner-avatar avtar-big"
-          alt="Owner Avatar"
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <LazyImage
+            src={ownerInfo.avatar_url}
+            className="owner-avatar avtar-big"
+            alt="Owner Avatar"
+          />
+        </Suspense>
         <div className="user-info">
           <p>{owner}</p>
           <p>Followers: {ownerInfo.followers}</p>
@@ -73,15 +76,15 @@ const User: React.FC<UserProps> = ({ owner, ownerInfo, cardTheme }) => {
       </div>
 
       <div className="stats mb-3">
-        <img
+        <LazyImage
           src={`https://github-readme-stats.vercel.app/api?username=${owner}&show_icons=true&theme=${cardTheme}`}
           alt="GitHub Stats"
         />
-        <img
+        <LazyImage
           src={`https://github-readme-streak-stats.herokuapp.com/?user=${owner}&theme=${cardTheme}`}
           alt="Streak Stats"
         />
-        <img
+        <LazyImage
           src={`https://github-readme-stats.vercel.app/api/top-langs?username=${owner}&layout=compact&hide=jupyter%20notebook&theme=${cardTheme}`}
           alt="GitHub Stats"
         />
@@ -107,7 +110,7 @@ const Repo: React.FC<RepoProps> = ({
       <hr />
       <div className="repo-info">
         <div>
-          <img
+          <LazyImage
             className="repo-avatar"
             src={`https://github-readme-stats.vercel.app/api/pin/?username=${owner}&repo=${repoName}&theme=${cardTheme}`}
             alt="Repository"
@@ -198,11 +201,13 @@ const Summary: React.FC<SummaryProps> = ({
       <div className="left-sidebar">
         <div>
           <div className="user-profile">
-            <img
-              src={ownerInfo.avatar_url}
-              className="owner-avatar"
-              alt="Owner Avatar"
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <LazyImage
+                src={ownerInfo.avatar_url}
+                className="owner-avatar"
+                alt="Owner Avatar"
+              />
+            </Suspense>
             <div className="user-info">
               <p>{owner}</p>
               <p>Followers: {ownerInfo.followers}</p>
@@ -212,18 +217,24 @@ const Summary: React.FC<SummaryProps> = ({
           </div>
 
           <div className="stats mb-3">
-            <img
-              src={`https://github-readme-stats.vercel.app/api?username=${owner}&show_icons=true&theme=${cardTheme}`}
-              alt="GitHub Stats"
-            />
-            <img
-              src={`https://github-readme-streak-stats.herokuapp.com/?user=${owner}&theme=${cardTheme}`}
-              alt="Streak Stats"
-            />
-            <img
-              src={`https://github-readme-stats.vercel.app/api/top-langs?username=${owner}&layout=compact&hide=jupyter%20notebook&theme=${cardTheme}`}
-              alt="GitHub Stats"
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <LazyImage
+                src={`https://github-readme-stats.vercel.app/api?username=${owner}&show_icons=true&theme=${cardTheme}`}
+                alt="GitHub Stats"
+              />
+            </Suspense>
+            <Suspense fallback={<div>Loading...</div>}>
+              <LazyImage
+                src={`https://github-readme-streak-stats.herokuapp.com/?user=${owner}&theme=${cardTheme}`}
+                alt="Streak Stats"
+              />
+            </Suspense>
+            <Suspense fallback={<div>Loading...</div>}>
+              <LazyImage
+                src={`https://github-readme-stats.vercel.app/api/top-langs?username=${owner}&layout=compact&hide=jupyter%20notebook&theme=${cardTheme}`}
+                alt="GitHub Stats"
+              />
+            </Suspense>
           </div>
         </div>
       </div>
@@ -243,11 +254,13 @@ const Summary: React.FC<SummaryProps> = ({
                   </a>
                 </div>
               </div>
-              <img
-                className="repo-avatar"
-                src={`https://github-readme-stats.vercel.app/api/pin/?username=${owner}&repo=${repoName}&theme=${cardTheme}`}
-                alt="Repository"
-              />
+              <Suspense fallback={<div>Loading...</div>}>
+                <img
+                  className="repo-avatar"
+                  src={`https://github-readme-stats.vercel.app/api/pin/?username=${owner}&repo=${repoName}&theme=${cardTheme}`}
+                  alt="Repository"
+                />
+              </Suspense>
               <hr />
               <div>
                 <p>Repository Summary:</p>
@@ -273,6 +286,13 @@ const Summary: React.FC<SummaryProps> = ({
       </div>
     </div>
   );
+};
+
+const LazyImage: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = ({
+  className,
+  ...props
+}) => {
+  return <img className={className} {...props} />;
 };
 
 export { User, Summary, Repo, CommitHistory };

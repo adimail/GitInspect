@@ -12,10 +12,27 @@ import { BsFillFileEarmarkPersonFill } from "react-icons/bs";
 import { User, Summary, Repo, CommitHistory } from "./evaluationtabs";
 import { MoveToTop } from "../utils/gototop";
 
+import SEO from "./helmet";
+
 interface RepoData {
   repoInfo: RepoInfo;
   ownerInfo: OwnerInfo;
 }
+
+interface RenderHelmetProps {
+  title: string;
+}
+
+const RenderHelmet: React.FC<RenderHelmetProps> = ({ title }) => {
+  return (
+    <SEO
+      title={title}
+      description="Git Inspect is a web app for reviewing GitHub repo & user stats. It utilizes the GitHub API to provide insights into commit history & more."
+      name="Git Inspect"
+      type="Article"
+    />
+  );
+};
 
 const RepositoryEvaluation = () => {
   const { theme } = useTheme();
@@ -110,28 +127,47 @@ const RepositoryEvaluation = () => {
     fetchRepoData();
   }, [owner, repoName]);
 
-  if (loading) return <p className="container pt-5">Loading...</p>;
-  if (error) return <p className="container pt-5">{error}</p>;
-  if (owner && repoName && !userExists)
+  if (loading) {
     return (
-      <div className="container">
-        <p className="pt-5">
-          There is a typo in your search.
-          <br />
-          GitInspect cannot find matching results for user{" "}
-          <strong>{owner}</strong> & repository <strong>{repoName}</strong>
-        </p>
-        <p>
-          Go back to <a href="/">home</a> page
-        </p>
-      </div>
+      <>
+        <RenderHelmet title="Git Inspect - Loading" />
+        <p className="container pt-5">Loading...</p>
+      </>
     );
+  }
+  if (error)
+    return (
+      <>
+        <RenderHelmet title="Git Inspect - Uncaught Error" />
+        <p className="container pt-5">{error}</p>
+      </>
+    );
+  if (owner && repoName && !userExists) {
+    return (
+      <>
+        <RenderHelmet title="Git Inspect - Search Error" />
+        <div className="container">
+          <p className="pt-5">
+            There is a typo in your search.
+            <br />
+            GitInspect cannot find matching results for user{" "}
+            <strong>{owner}</strong> & repository <strong>{repoName}</strong>
+          </p>
+          <p>
+            Go back to <a href="/">home</a> page
+          </p>
+        </div>
+      </>
+    );
+  }
   if (!repoData) return null;
 
   const { repoInfo, ownerInfo } = repoData;
 
   return (
     <>
+      <RenderHelmet title="Git Inspect - Evaluation" />
+
       <div className="wrapper">
         <div ref={navbarRef} className="gitinspect-navbar">
           <div

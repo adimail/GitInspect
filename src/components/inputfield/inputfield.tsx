@@ -103,7 +103,7 @@ const InputField = () => {
 
   return (
     <div className="top">
-      <div className="navbar">
+      <header className="navbar">
         <h1>
           <a style={{ color: "white" }} href="/">
             GitInspect
@@ -120,8 +120,8 @@ const InputField = () => {
             <MdDarkMode size={27} color="gray" />
           )}
         </motion.div>
-      </div>
-      <motion.div
+      </header>
+      <motion.nav
         className="input-container"
         style={{ marginTop: marginTop, marginBottom: marginBottom }}
         initial={{ marginTop: 10, marginBottom: 0 }}
@@ -152,7 +152,7 @@ const InputField = () => {
         >
           Submit
         </motion.button>
-      </motion.div>
+      </motion.nav>
     </div>
   );
 };
